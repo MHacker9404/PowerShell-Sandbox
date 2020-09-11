@@ -7,6 +7,8 @@ Set-ExecutionPolicy Bypass -Scope Process -Force; `
     [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; `
     iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
 
+winget install microsoft.teams
+winget install ShiningLight.OpenSSLLight
 winget install yarn
 winget install 7zip
 winget install microsoft.dotnet
@@ -28,13 +30,4 @@ winget install docker.dockerdesktopedge -i
 winget install postman
 
 # consolez `
-cinst kdiff3 `
-    firacode `
-    processhacker.install `
-    paint.net `
-    PSWindowsUpdate `
-    SourceCodePro `
-    sysinternals `
-    stylecop `
-    OpenSSL.Light `
-    -y
+cinst kdiff3  firacode processhacker.install  paint.net  PSWindowsUpdate  SourceCodePro  sysinternals  stylecop -y
