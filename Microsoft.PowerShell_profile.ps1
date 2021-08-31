@@ -35,7 +35,7 @@ function PRB-LoadAzurite
 function PRB-LoadAzCli
 {
 	PRB-LinuxDocker
-	docker run -it --rm -v ${HOME}/.ssh:/root/.ssh -v ${pwd}:/workspace mcr.microsoft.com/azure-cli bash 
+	docker run -it --rm -v ${HOME}/.ssh:/root/.ssh -v ${pwd}:/workspace -w /workspace mcr.microsoft.com/azure-cli bash 
 }
 
 function PRB-LoadCosmosDB
