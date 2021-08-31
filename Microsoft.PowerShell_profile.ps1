@@ -1,17 +1,29 @@
 Import-Module posh-git
 
+function PRB-SetPanicReadOnly
+{
+	$f = get-item e:\docker\images\panic.log
+	$f.Attributes = $f.Attributes -band (-bnot [System.IO.FileAttributes]::ReadOnly)
+}
+
 function PRB-WindowsDocker
 {
+	$cwd = ${pwd}
 	Set-Location -Path "C:\Program Files\Docker\Docker\"
 	.\DockerCli.exe -SwitchDaemon -SwitchWindowsEngine
 	Start-Sleep -s 5
+	PRB-SetPanicReadOnly
+	Set-Location -Path ${cwd}
 }
 
 function PRB-LinuxDocker
 {
+	$cwd = ${pwd}
 	Set-Location -Path "C:\Program Files\Docker\Docker\"
 	.\DockerCli.exe -SwitchDaemon -SwitchLinuxEngine
 	Start-Sleep -s 5
+	PRB-SetPanicReadOnly
+	Set-Location -Path ${cwd}
 }
 
 function PRB-LoadAzurite
@@ -20,17 +32,24 @@ function PRB-LoadAzurite
 	docker run -d --rm -p 10000:10000 -p 10001:10001 -p 10002:10002 -v /e/data-azurite:/data -v ${pwd}:/workspace mcr.microsoft.com/azure-storage/azurite:latest
 }
 
+function PRB-LoadAzCli
+{
+	PRB-LinuxDocker
+	docker run -it --rm -v ${HOME}/.ssh:/root/.ssh -v ${pwd}:/workspace mcr.microsoft.com/azure-cli bash 
+}
+
 function PRB-LoadCosmosDB
 {
 	PRB-WindowsDocker
-	$hostDirectory='e:\CosmosDBEmulator\bind-mount'
-	Set-Location -Path "e:\"
+	$hostDirectory="$Env:RepoDir/CosmosDBEmulator/bind-mount"
+	Set-Location -Path "$Env:RepoDir"
 	md "${hostDirectory}" 2>null
-	Set-Location -Path "d:/repos/docker-sandbox/"
+	Set-Location -Path "$Env:RepoDir/docker-sandbox/"
 	# docker compose -f ./docker-compose.cosmosdb.yml up -d
-	docker run -d --rm --name cosmosdb `
+	docker run -d --rm `
+		--name cosmosdb `
 		--memory 3GB `
-		--mount "type=bind,source=${bind_mount},destination=C:\CosmosDB.Emulator\bind-mount"  `
+		--mount "type=bind,source=${hostDirectory},destination=C:\CosmosDB.Emulator\bind-mount"  `
 		--tty `
 		-p 8081:8081 `
 		-p 8900:8900 `
