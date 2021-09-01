@@ -10,7 +10,7 @@ function PRB-WindowsDocker
 {
 	$cwd = ${pwd}
 	Set-Location -Path "C:\Program Files\Docker\Docker\"
-	.\DockerCli.exe -SwitchDaemon -SwitchWindowsEngine
+	.\DockerCli.exe -SwitchWindowsEngine
 	Start-Sleep -s 5
 	PRB-SetPanicReadOnly
 	Set-Location -Path ${cwd}
@@ -20,7 +20,7 @@ function PRB-LinuxDocker
 {
 	$cwd = ${pwd}
 	Set-Location -Path "C:\Program Files\Docker\Docker\"
-	.\DockerCli.exe -SwitchDaemon -SwitchLinuxEngine
+	.\DockerCli.exe -SwitchLinuxEngine
 	Start-Sleep -s 5
 	PRB-SetPanicReadOnly
 	Set-Location -Path ${cwd}
@@ -35,7 +35,13 @@ function PRB-LoadAzurite
 function PRB-LoadAzCli
 {
 	PRB-LinuxDocker
-	docker run -it --rm -v ${HOME}/.ssh:/root/.ssh -v ${pwd}:/workspace -w /workspace mcr.microsoft.com/azure-cli bash 
+	docker run -it --rm -v ${HOME}/.ssh:/root/.ssh -v ${pwd}:/workspace -w /workspace --name azure-cli mcr.microsoft.com/azure-cli bash 
+}
+
+function PRB-LoadTerraform
+{
+	PRB-LinuxDocker
+	docker run -it --rm -v ${HOME}/.ssh:/root/.ssh -v ${HOME}/.aws:/root/.aws -v ${HOME}/.azure:/root/.azure -v ${pwd}:/workspace -w /workspace --name terraform hashicorp/terraform:latest bash 
 }
 
 function PRB-LoadCosmosDB
