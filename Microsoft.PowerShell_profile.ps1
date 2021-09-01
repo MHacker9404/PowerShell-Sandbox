@@ -41,7 +41,7 @@ function PRB-LoadAzCli
 function PRB-LoadTerraform
 {
 	PRB-LinuxDocker
-	docker run -it --rm -v ${HOME}/.ssh:/root/.ssh -v ${HOME}/.aws:/root/.aws -v ${HOME}/.azure:/root/.azure -v ${pwd}:/workspace -w /workspace --name terraform hashicorp/terraform:latest bash 
+	# docker run -it --rm -v ${HOME}/.ssh:/root/.ssh -v ${HOME}/.aws:/root/.aws -v ${HOME}/.azure:/root/.azure -v ${pwd}:/workspace -w /workspace --name terraform prismea/terraform-cli-public:latest bash 
 }
 
 function PRB-LoadCosmosDB
