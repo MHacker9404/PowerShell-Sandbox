@@ -1,6 +1,3 @@
-Rename-Computer -NewName -NoRestart 
-Set-ExecutionPolicy RemoteSigned
-
 winget install powershell-preview
 winget install Microsoft.WindowsTerminalPreview
 
@@ -27,7 +24,7 @@ Enable-WindowsOptionalFeature -OnLine -Featurename VirtualMachinePlatform -All -
 
 wsl --set-default-version 2
 
-Install-Module -Name posh-git -RequiredVersion 0.7.3
+Install-Module -Name posh-git 
 
 Install-Module PSWindowsUpdate
 Get-WindowsUpdate
