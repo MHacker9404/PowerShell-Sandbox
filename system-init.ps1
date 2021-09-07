@@ -1,7 +1,6 @@
 $activationKey = $args[0]
 $targetName = $args[1]
 
-
 Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Confirm
 SLMGR /ipk $activationKey
 
@@ -9,6 +8,9 @@ SLMGR /ipk $activationKey
 # Write-Host 'Enter new system name:';
 # $targetName = Read-Host;
 Rename-Computer -NewName $targetName
+
+# enable developer mode
+reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\AppModelUnlock" /t REG_DWORD /f /v "AllowDevelopmentWithoutDevLicense" /d "1"
 
 # $DataStamp = get-date -Format yyyyMMddTHHmmss
 # $logFile = '{0}-{1}.log' -f $file.fullname,$DataStamp
@@ -28,6 +30,7 @@ Install-Module –Name PowerShellGet –Force
 Install-Module –Name PowerShellGet –Force -AllowClobber
 Update-Module -Name PowerShellGet
 
+# wsl update for Win10 - code rewritten from below link
 # # http://woshub.com/using-winget-package-manager-windows/
 $file = 'wsl-update.msi'
 $DownloadFile = Join-Path -Path (New-Object -ComObject Shell.Application).NameSpace('shell:Downloads').Self.Path -ChildPath $file
@@ -208,12 +211,12 @@ winget install Microsoft.VC++2013Redist-x64
 winget install Microsoft.VC++2015-2019Redist-x86
 winget install Microsoft.VC++2015-2019Redist-x64
 
-winget install Microsoft.VC++2017Redist-x86
-winget install Microsoft.VC++2017Redist-x64
+# winget install Microsoft.VC++2017Redist-x86
+# winget install Microsoft.VC++2017Redist-x64
 
 winget install Microsoft.VisualStudioCode
-winget install Microsoft.Microsoft.VisualStudio.2019.Enterprise-Preview -i
-winget install Microsoft.Microsoft.VisualStudio.2022.Enterprise-Preview -i
+winget install Microsoft.VisualStudio.2019.Enterprise-Preview -i
+winget install Microsoft.VisualStudio.2022.Enterprise-Preview -i
 winget install Microsoft.SQLServerManagementStudio -i
 
 winget install microsoft.dotnet
@@ -224,35 +227,36 @@ dotnet tool install --global dotnet-sonarscanner
 dotnet tool install --global dotnet-cleanup
 dotnet tool install --global dotnet-ef
 
+winget install LINQPad.LINQPad.6
+winget install Telerik.Fiddler
+winget install docker.dockerdesktopedge -i
+winget install Git.Git
+winget install github.cli
+winget install GitExtensionsTeam.GitExtensions
+winget install TortoiseGit.TortoiseGit
+winget install Microsoft.GitCredentialManagerCore
+winget install postman
+winget install JoachimEibl.KDiff3
+winget install JetBrains.ReSharper.EarlyAccess -i
+winget install Kubernetes.minikube
+winget install WinSCP.WinSCP
+
 winget install nvidia.geforceexperience
 
 winget install Oracle.VirtualBox -i
 
 winget install 7zip.7zip
-winget install LINQPad.LINQPad.6
 winget install amazon.kindle
 winget install f.lux
 winget install boinc -i
-winget install Telerik.Fiddler
 winget install Mozilla.FirefoxDeveloperEdition
 winget install Google.Chrome.Beta
 winget install Google.Chrome.Dev
 winget install CrystalDewWorld.CrystalDiskInfo
 winget install IObitUninstall
 
-winget install docker.dockerdesktopedge -i
-winget install Git.Git
-winget install github.cli
-winget install GitExtensionsTeam.GitExtensions
-winget install TortoiseGit.TortoiseGit
-winget install Microsoft.GitCredentialManagerCore`
 winget install zoom
 winget install slack
-winget install postman
-winget install JoachimEibl.KDiff3
-winget install JetBrains.ReSharper.EarlyAccess -i
-winget install Kubernetes.minikube
-
 winget install Adobe.AdobeAcrobatReaderDC
 winget install Garmin.GarminExpress
 winget install Samsung.SmartSwitch
