@@ -183,6 +183,9 @@ Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Windows-Subsystem-L
 Enable-WindowsOptionalFeature -Online -FeatureName VirtualMachinePlatform -All -NoRestart
 Restart-Computer
 
+# https://blog.davidchristiansen.com/2016/11/run-hyper-v-docker-on-virtual-machine/
+# Set-VMProcessor -VMName <vm-name> -ExposeVirtualizationExtensions $true
+
 # https://docs.microsoft.com/en-us/windows/wsl/install-win10#step-4---download-the-linux-kernel-update-package
 wsl --set-default-version 2
 
