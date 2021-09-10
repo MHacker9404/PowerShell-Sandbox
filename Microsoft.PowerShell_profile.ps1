@@ -38,6 +38,18 @@ function PRB-LoadAzCli
 	docker run -it --rm -v ${HOME}/.ssh:/root/.ssh -v ${pwd}:/workspace -w /workspace --name azure-cli mcr.microsoft.com/azure-cli bash 
 }
 
+function PRB-LoadAwsCliV1
+{
+	PRB-LinuxDocker
+	docker run -it --rm -v ${HOME}/.ssh:/home/node/.ssh -v ${HOME}/.aws:/home/node/.aws -v ${pwd}:/workspace -w /workspace --name aws-cli prbservicesllc/aws-cdk:v1
+}
+
+function PRB-LoadAwsCliV2
+{
+	PRB-LinuxDocker
+	docker run -it --rm -v ${HOME}/.ssh:/home/node/.ssh -v ${HOME}/.aws:/home/node/.aws -v ${pwd}:/workspace -w /workspace --name aws-cli prbservicesllc/aws-cdk:v2
+}
+
 function PRB-LoadTerraform
 {
 	PRB-LinuxDocker
