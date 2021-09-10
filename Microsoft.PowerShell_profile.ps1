@@ -8,21 +8,21 @@ function PRB-SetPanicReadOnly
 
 function PRB-WindowsDocker
 {
+	PRB-SetPanicReadOnly
 	$cwd = ${pwd}
 	Set-Location -Path "C:\Program Files\Docker\Docker\"
 	.\DockerCli.exe -SwitchWindowsEngine
 	Start-Sleep -s 5
-	PRB-SetPanicReadOnly
 	Set-Location -Path ${cwd}
 }
 
 function PRB-LinuxDocker
 {
+	PRB-SetPanicReadOnly
 	$cwd = ${pwd}
 	Set-Location -Path "C:\Program Files\Docker\Docker\"
 	.\DockerCli.exe -SwitchLinuxEngine
 	Start-Sleep -s 5
-	PRB-SetPanicReadOnly
 	Set-Location -Path ${cwd}
 }
 
