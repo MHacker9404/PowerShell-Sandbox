@@ -26,6 +26,18 @@ function PRB-LinuxDocker
 	Set-Location -Path ${cwd}
 }
 
+function PRB-LoginGovAzure
+{
+	az cloud set --name AzureUSGovernment
+	az login
+}
+
+function PRB-LoginCommercialAzure
+{
+	az cloud set --name AzureCloud
+	az login
+}
+
 function PRB-LoadAzurite
 {
 	PRB-LinuxDocker
