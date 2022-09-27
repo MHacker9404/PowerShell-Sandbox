@@ -1,4 +1,4 @@
-oh-my-posh.exe init pwsh | Invoke-Expression
+(@(&'C:/Users/philb/AppData/Local/Programs/oh-my-posh/bin/oh-my-posh.exe' init pwsh --config="C:\Users\philb\AppData\Local\oh-my-posh\config.omp.json" --print) -join "`n") | Invoke-Expression
 
 function vci
 {
@@ -6,7 +6,12 @@ function vci
     code-insiders $param1
 }
 
-function restartDocker
+function conda {
+    docker run -i -t -p 8888:8888 --mount source=jupyter, target=/opt/notebooks continuumio/anaconda3 /bin/bash -c 'conda install jupyter -y --quiet mkdir -p /opt/notebooks jupyter notebook' `
+        " --notebook-dir=/opt/notebooks --ip='*' --port=8888 --no-browser --allow-root"
+}
+
+function stopDocker
 {
     $processes = Get-Process '*docker desktop*'
     if ($processes.Count -gt 0)
@@ -14,6 +19,11 @@ function restartDocker
         $processes[0].Kill()
         $processes[0].WaitForExit()
     }
+}
+
+function restartDocker
+{
+    stopDocker
     Start-Process 'C:\Program Files\Docker\Docker\Docker Desktop.exe'
 }
 
@@ -25,25 +35,34 @@ function checkDocker
 
 function Move-Docker-Data
 {
+    wsl --shutdown
     wsl --export docker-desktop-data 'd:/wsl/docker-desktop-data/data.tar'
     wsl --unregister docker-desktop-data
     wsl --import docker-desktop-data 'D:/wsl/docker-desktop-data' 'd:/wsl/docker-desktop-data/data.tar'
 }
 
-function PRB-LinuxDocker
+function Move-Debian
 {
-    PRB-SetPanicReadOnly
-    $cwd = ${pwd}
-    Set-Location -Path 'C:\Program Files\Docker\Docker\'
-    .\DockerCli.exe -SwitchLinuxEngine
-    Start-Sleep -s 5
-    Set-Location -Path ${cwd}
+    wsl --shutdown
+    wsl --export Debian 'd:/wsl/debian/data.tar'
+    wsl --unregister Debian
+    wsl --import Debian 'D:/wsl/debian' 'd:/wsl/debian/data.tar'
 }
 
-function PRB-LoginGovAzure
+function Move-Ubuntu
 {
-    az cloud set --name AzureUSGovernment
-    az login
+    wsl --shutdown
+    wsl --export Ubuntu 'd:/wsl/ubuntu/data.tar'
+    wsl --unregister Ubuntu
+    wsl --import Ubuntu 'D:/wsl/ubuntu' 'd:/wsl/ubuntu/data.tar'
+}
+
+function Move-Ubuntu-Preview
+{
+    wsl --shutdown
+    wsl --export Ubuntu-Preview 'd:/wsl/ubuntu-preview/data.tar'
+    wsl --unregister Ubuntu-Preview
+    wsl --import Ubuntu-Preview 'D:/wsl/ubuntu-preview' 'd:/wsl/ubuntu-preview/data.tar'
 }
 
 function PRB-LoginCommercialAzure
@@ -54,35 +73,5 @@ function PRB-LoginCommercialAzure
 
 function PRB-LoadAzurite
 {
-    PRB-LinuxDocker
     docker run -d --rm -p 10000:10000 -p 10001:10001 -p 10002:10002 -v /e/data-azurite:/data -v ${pwd}:/workspace mcr.microsoft.com/azure-storage/azurite:latest
-}
-
-function PRB-LoadCosmosDB
-{
-    PRB-WindowsDocker
-    $hostDirectory = "$Env:RepoDir/CosmosDBEmulator/bind-mount"
-    Set-Location -Path "$Env:RepoDir"
-    md "${hostDirectory}" 2>null
-    Set-Location -Path "$Env:RepoDir/docker-sandbox/"
-    # docker compose -f ./docker-compose.cosmosdb.yml up -d
-    docker run -d --rm `
-        --name cosmosdb `
-        --memory 3GB `
-        --mount "type=bind,source=${hostDirectory},destination=C:\CosmosDB.Emulator\bind-mount"  `
-        --tty `
-        -p 8081:8081 `
-        -p 8900:8900 `
-        -p 8901:8901 `
-        -p 8902:8902 `
-        -p 10250:10250 `
-        -p 10251:10251 `
-        -p 10252:10252 `
-        -p 10253:10253 `
-        -p 10254:10254 `
-        -p 10255:10255 `
-        -p 10256:10256 `
-        -p 10350:10350 mcr.microsoft.com/cosmosdb/windows/azure-cosmos-emulator
-    Set-Location -Path ${hostDirectory}
-    ./importcert.ps1
 }
