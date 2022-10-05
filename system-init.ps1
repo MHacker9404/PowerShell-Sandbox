@@ -245,7 +245,6 @@ winget install Kubernetes.minikube
 winget install WinSCP.WinSCP
 
 winget install nvidia.geforceexperience
-
 winget install Oracle.VirtualBox -i
 
 winget install 7zip.7zip
