@@ -33,6 +33,14 @@ function checkDocker
     Get-ChildItem -Recurse
 }
 
+function backup-WSL
+{
+    wsl --export docker-desktop-data 'd:/wsl/docker-desktop-data/data.tar'
+    wsl --export Debian 'd:/wsl/debian/data.tar'
+    wsl --export Ubuntu 'd:/wsl/ubuntu/data.tar'
+    wsl --export Ubuntu-Preview 'd:/wsl/ubuntu-preview/data.tar'
+}
+
 function Move-Docker-Data
 {
     wsl --shutdown
@@ -76,19 +84,26 @@ function PRB-LoadAzurite
     docker run -d --rm -p 10000:10000 -p 10001:10001 -p 10002:10002 -v /e/data-azurite:/data -v ${pwd}:/workspace mcr.microsoft.com/azure-storage/azurite:latest
 }
 
-function DefaultSetup
+function initProfile
 {
-    wsl --set-default-version 2
+    dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all /norestart
+    
+    winget install --id Microsoft.PowerShell.Preview
+    winget install --id JanDeDobbeleer.OhMyPosh
+    
+    # wsl --set-default-version 2
+    winget install --id Microsoft.VisualStudioCode.Insiders
+
+    winget install --id docker.dockerdesktopedge
 
     winget install --id Bitdefender.Bitdefender
+}
 
+function DefaultSetup
+{
     winget install --id Git.Git
     winget install --id github.cli
-    winget install --id docker.dockerdesktopedge
     winget install --id JoachimEibl.KDiff3
-    winget install --id Microsoft.PowerShell.Preview
-    winget install --id Microsoft.WindowsTerminalPreview
-    winget install --id JanDeDobbeleer.OhMyPosh
     winget install --id CoreyButler.NVMforWindows
     winget install --id 7zip.7zip
     winget install --id Postman.Postman
@@ -98,8 +113,10 @@ function DefaultSetup
     winget install --id TortoiseGit.TortoiseGit
     winget install --id Microsoft.GitCredentialManagerCore
 
-    winget install --id Microsoft.SQLServer.2019.Express -i
+    winget install --id Microsoft.SQLServer.2019.Developer -i
     winget install --id Microsoft.VisualStudio.2022.Professional -i
+
+    winget install --id Microsoft.SQLServerManagementStudio -i
 
     winget install --id microsoft.dotnet.sdk.preview
     winget install --id microsoft.dotnet.sdk.6
@@ -109,6 +126,9 @@ function DefaultSetup
     dotnet tool install --global dotnet-sonarscanner
     dotnet tool install --global dotnet-cleanup
     dotnet tool install --global dotnet-ef
+
+    winget install --id Anaconda.Anaconda3 -i
+    winget install --id Quicken.Quicken
 
     winget install --id LINQPad.LINQPad.7
     winget install --id Telerik.Fiddler
@@ -128,9 +148,10 @@ function DefaultSetup
     winget install --id Zoom.Zoom
     winget install --id Zoom.Zoom.OutlookPlugin
     winget install --id SlackTechnologies.Slack
-    winget install --id Adobe.AdobeAcrobatReaderDC
+    winget install --id Adobe.Acrobat.Reader.64-bit
     winget install --id Garmin.GarminExpress
     winget install --id Samsung.SmartSwitch
+    winget install --id OlegDanilov.RapidEnvironmentEditor
 
     
     [System.Environment]::SetEnvironmentVariable('ChocolateyInstall', 'd:\\programdata\\chocolatey', [System.EnvironmentVariableTarget]::Machine)
@@ -138,9 +159,13 @@ function DefaultSetup
         [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; `
         iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
 
-    cinst firacode paint.net SourceCodePro -y
+    cinst firacode SourceCodePro -y
 
     Install-Module PSWindowsUpdate
+}
+
+function update-windows
+{
     Get-WindowsUpdate
     Install-WindowsUpdate
 }
